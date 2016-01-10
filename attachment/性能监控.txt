@@ -1,0 +1,14 @@
+
+#install pip
+yum install epel-release
+yum install -y python-pip
+
+#install influxdb
+# for 64-bit systems
+wget https://s3.amazonaws.com/influxdb/influxdb-0.8.8-1.x86_64.rpm
+sudo rpm -ivh influxdb-0.8.8-1.x86_64.rpm
+
+#Then start the daemon by running:
+sudo /etc/init.d/influxdb start
+
+http://192.168.1.204:8083/
