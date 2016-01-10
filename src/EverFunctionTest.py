@@ -1,4 +1,4 @@
-import json
+import xml.etree.ElementTree as etree
 import re
 import time
 import os
@@ -7,33 +7,62 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from src import ApiClient
+base_dir = os.path.dirname(__file__)
+config_file = os.path.join(base_dir, os.path.pardir, 'config.xml') #获取附件所在的目录
+record_file = os.path.join(base_dir, os.path.pardir, 'record.txt') #获取附件所在的目录
 
-def run(internal):
+def load_config_file():
+    global config_file
+    global username
+    global password
+    global from_text
+    global subject_text
+    global email_content_text
+    global app_id
+    global app_secert
+    global internal_time
+    global mail_server_name
+
+    tree = etree.parse(config_file)
+
+    username = tree.find('email_config').attrib['username']
+    password = tree.find('email_config').attrib['password']
+    from_text = tree.find('email_config/from').text
+    subject_text = tree.find('email_config/subject').text
+    email_content_text = tree.find('email_config/text').text
+    app_id = tree.find('youzan_account/app_id').text
+    app_secert = tree.find('youzan_account/app_secert').text
+    internal_time = tree.find('internal_time').text
+    mail_server_name = tree.find('email_config/server').text
+
+def run():
+    load_config_file()
     while True:
         test_myself()
-        time.sleep(internal)
+        time.sleep(int(internal_time))
 
 def test_myself():
-    app_id = '290c00897561005101'
-    app_sert = '52813f143dbcc7854815a12043a48213'
+    # app_id = '290c00897561005101'
+    # app_secert = '52813f143dbcc7854815a12043a48213'
     method = 'kdt.trades.sold.get'
     params_dict = {
-        # 'fields' : 'orders',
+        'fields' : 'tid,orders',
         'page_size' : 100,
         'page_no' : 1,
         'status' : 'WAIT_BUYER_CONFIRM_GOODS' #购买成功，订单状态显示为 卖家已发货
     }
-    test_object = ApiClient.ApiClient(app_id, app_sert)
+    test_object = ApiClient.ApiClient(app_id, app_secert)
 
     result = test_object.get(method, **params_dict).encode('utf-8').decode('unicode-escape')
     print(result)
 
     email_addresses = re.findall('{"title":"邮件","content":"(.*?)"}', result, re.S)
-    tids = re.findall('"tid":"(.*?)",', result, re.S)
+    tids = re.findall('"tid":"(.*?)"},', result, re.S)
     # print(tids)
     total_results = re.findall('"total_results":"(.*?)"', result, re.S)[0]
 
-    file = open('record.txt', mode='r+', encoding='utf-8')
+    global record_file
+    file = open(record_file, mode='r+', encoding='utf-8')
     pre_total_result = file.readline().split(':')[-1].rstrip('\r\n')  #得到已经发送过邮件的数量
     #print(pre_total_result)
     if int(total_results) > int(pre_total_result):
@@ -88,8 +117,7 @@ def fix_email_address(addresses):
     return result
 
 def write_to_file(total_results, tids, email_addresses, status):
-
-    record_file = 'record.txt'
+    global record_file
     with open(record_file, 'r', encoding='utf-8') as file:
         lines = file.readlines()[1:]
 
@@ -114,8 +142,9 @@ def write_to_file(total_results, tids, email_addresses, status):
 def send_mail(addresses):
 
     #邮件账户信息
-    from_email_address = 'kylinlingh@foxmail.com'
-    password_for_mail = 'lin0607103014'
+    # username = 'kylinlingh@foxmail.com'
+    # password = 'lin0607103014'
+
 
     if not isinstance(addresses, list):
         raise ValueError('It must be a list')
@@ -124,16 +153,19 @@ def send_mail(addresses):
     email = MIMEMultipart()
 
     #邮件头
-    email['Subject'] = '测试'
-    email['From'] = 'kylinlin'
-    email_content = '''
-    你好：
-        感谢你购买我们的麻瓜教程，祝你学习愉快！
-    '''
-    email_content = MIMEText(email_content, 'plain', 'utf-8')
+    # email['Subject'] = '测试'
+    # email['From'] = 'kylinlin'
+    # email_content = '''
+    # 你好：
+    #     感谢你购买我们的麻瓜教程，祝你学习愉快！
+    # '''
+    email['Subject'] = subject_text
+    email['From'] = from_text
+    # email_content = email_content_text
+    email_content = MIMEText(email_content_text, 'plain', 'utf-8')
     email.attach(email_content)
 
-    base_dir = os.path.dirname(__file__)
+    # base_dir = os.path.dirname(__file__)
     attach_dir = os.path.join(base_dir, os.path.pardir, 'attachment') #获取附件所在的目录
     attach_files = os.walk(attach_dir)
     for each in attach_files:
@@ -145,22 +177,25 @@ def send_mail(addresses):
             attachment.add_header('Content-Disposition', 'attachment', filename=('gbk', '', filename))
             email.attach(attachment)
     try:
-        qq_server = smtplib.SMTP('smtp.qq.com', 25) #连接qq邮件服务器
+        # qq_server = smtplib.SMTP('smtp.qq.com', 25) #连接qq邮件服务器
+        mail_server = smtplib.SMTP(mail_server_name, 25) #连接qq邮件服务器
         # qq_server.set_debuglevel(1)
-        qq_server.starttls()
-        qq_server.login(from_email_address, password_for_mail)
-        qq_server.sendmail(from_email_address, to_email_addresses, email.as_string())
+        mail_server.starttls()
+        mail_server.login(username, password)
+        mail_server.sendmail(username, to_email_addresses, email.as_string())
         print('发送成功')
         send_result = 'Successed'
     except Exception as e:
         print('发送失败')
         send_result = ('Failed', str(e))
     finally:
-        qq_server.close()
+        mail_server.close()
     return send_result
 
 if __name__ == '__main__':
     # test_myself()
     # test_magua()
-    internal_time = 60
-    run(internal_time)
+    # internal_time = 60
+    run()
+    # load_config_file()
+    # test()

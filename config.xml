@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+    <email_config username="kylinlingh@foxmail.com" password="lin0607103014"> <!--填入你的qq邮箱和登陆密码-->
+        <server>smtp.qq.com</server>
+        <from>kylin</from>        <!--邮件的发出者-->
+        <subject>测试</subject>    <!--邮件主题-->
+        <text>你好：
+        欢迎你，这是一个测试邮件！
+        </text>
+    </email_config>
+    <youzan_account>
+        <!--填入有赞api中两个参数-->
+        <app_id>290c00897561005101</app_id>
+        <app_secert>52813f143dbcc7854815a12043a48213</app_secert>
+    </youzan_account>
+    <internal_time>300</internal_time> <!--检测订单的时间间隔（秒）-->
+</config>
