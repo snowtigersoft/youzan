@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as etree
+from threading import Thread
 import re
 import time
 import os
@@ -6,7 +7,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from src import ApiClient
+from src import apiclient
 base_dir = os.path.dirname(__file__)
 config_file = os.path.join(base_dir, os.path.pardir, 'config.xml') #获取附件所在的目录
 record_file = os.path.join(base_dir, os.path.pardir, 'record.txt') #获取附件所在的目录
@@ -20,7 +21,7 @@ def load_config_file():
     global email_content_text
     global app_id
     global app_secert
-    global internal_time
+    global interval
     global mail_server_name
 
     tree = etree.parse(config_file)
@@ -32,14 +33,14 @@ def load_config_file():
     email_content_text = tree.find('email_config/text').text
     app_id = tree.find('youzan_account/app_id').text
     app_secert = tree.find('youzan_account/app_secert').text
-    internal_time = tree.find('internal_time').text
+    interval = tree.find('interval').text
     mail_server_name = tree.find('email_config/server').text
 
 def run():
     load_config_file()
     while True:
         test_myself()
-        time.sleep(int(internal_time))
+        time.sleep(int(interval))
 
 def test_myself():
     # app_id = '290c00897561005101'
@@ -51,10 +52,10 @@ def test_myself():
         'page_no' : 1,
         'status' : 'WAIT_BUYER_CONFIRM_GOODS' #购买成功，订单状态显示为 卖家已发货
     }
-    test_object = ApiClient.ApiClient(app_id, app_secert)
+    test_object = apiclient.ApiClient(app_id, app_secert)
 
     result = test_object.get(method, **params_dict).encode('utf-8').decode('unicode-escape')
-    print(result)
+    # print(result)
 
     email_addresses = re.findall('{"title":"邮件","content":"(.*?)"}', result, re.S)
     tids = re.findall('"tid":"(.*?)"},', result, re.S)
@@ -83,7 +84,7 @@ def test_magua():
         'page_no' : 1,
         'status' : 'WAIT_BUYER_CONFIRM_GOODS' #购买成功，订单状态显示为 卖家已发货
     }
-    test_object = ApiClient.ApiClient(app_id, app_sert)
+    test_object = apiclient.ApiClient(app_id, app_sert)
 
     result = test_object.get(method, **params_dict).encode('utf-8').decode('unicode-escape')
     print(result)
@@ -177,9 +178,8 @@ def send_mail(addresses):
             attachment.add_header('Content-Disposition', 'attachment', filename=('gbk', '', filename))
             email.attach(attachment)
     try:
-        # qq_server = smtplib.SMTP('smtp.qq.com', 25) #连接qq邮件服务器
         mail_server = smtplib.SMTP(mail_server_name, 25) #连接qq邮件服务器
-        # qq_server.set_debuglevel(1)
+        # mail_server.set_debuglevel(1)
         mail_server.starttls()
         mail_server.login(username, password)
         mail_server.sendmail(username, to_email_addresses, email.as_string())
@@ -190,12 +190,21 @@ def send_mail(addresses):
         send_result = ('Failed', str(e))
     finally:
         mail_server.close()
+
+
     return send_result
+
+def main():
+    thread = Thread(target=run, daemon=True) #声明为守护进程，在主线程结束后自动销毁
+    thread.start()
+    thread.join()
 
 if __name__ == '__main__':
     # test_myself()
     # test_magua()
     # internal_time = 60
-    run()
+
+    # run()
     # load_config_file()
     # test()
+    main()

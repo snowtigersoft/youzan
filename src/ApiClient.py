@@ -2,7 +2,7 @@ import datetime
 
 import requests
 
-from src import ApiProtocol
+from src import apiprotocol
 
 
 class ApiClient:
@@ -23,7 +23,7 @@ class ApiClient:
         }
         # url = self.api_entry + self.build_param_str(self.build_complete_params(method, **params))
         url = self.api_entry + self.get_params(method, **params)
-        print('url: ', url)
+        # print('url: ', url)
         response = requests.get(url, headers=header)
 
         response_text = repr(response.text)
@@ -70,20 +70,20 @@ class ApiClient:
                 common_params[key] = params[key]
         # c = ApiProtocol.ApiProtocol()
         # c.sign()
-        common_params[ApiProtocol.ApiProtocol.SIGN_KEY] = ApiProtocol.ApiProtocol().sign(self.app_secret, **common_params)
+        common_params[apiprotocol.ApiProtocol.SIGN_KEY] = apiprotocol.ApiProtocol().sign(self.app_secret, **common_params)
         # print('build_complete_params: ',common_params)
         return common_params
 
 
     def get_common_params(self, method):
         common_dict = {
-            ApiProtocol.ApiProtocol.APP_ID_KEY : self.app_id,
-            ApiProtocol.ApiProtocol.METHOD_KEY : method,
-            ApiProtocol.ApiProtocol.TIMESTAMP_KEY : str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+            apiprotocol.ApiProtocol.APP_ID_KEY : self.app_id,
+            apiprotocol.ApiProtocol.METHOD_KEY : method,
+            apiprotocol.ApiProtocol.TIMESTAMP_KEY : str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
             # ApiProtocol.ApiProtocol.TIMESTAMP_KEY : '2016-01-06 20:06:39',
-            ApiProtocol.ApiProtocol.FORMAT_KEY : self.format,
-            ApiProtocol.ApiProtocol.SIGN_METHOD_KEY : self.sign_method,
-            ApiProtocol.ApiProtocol.VERSION_KEY : self.version
+            apiprotocol.ApiProtocol.FORMAT_KEY : self.format,
+            apiprotocol.ApiProtocol.SIGN_METHOD_KEY : self.sign_method,
+            apiprotocol.ApiProtocol.VERSION_KEY : self.version
         }
         # print('get_common_params:',common_dict)
         return common_dict

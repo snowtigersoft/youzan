@@ -1,11 +1,11 @@
 import unittest
 
-from src import ApiProtocol
+from src import apiprotocol
 
 
 class ApiTest(unittest.TestCase):
 
-    test_obj = ApiProtocol.ApiProtocol()
+    test_obj = apiprotocol.ApiProtocol()
 
     def test_sign(self):
         test_dict = {

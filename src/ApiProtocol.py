@@ -35,7 +35,6 @@ class ApiProtocol:
     def hash(self, content):
         m = hashlib.md5(content.encode(encoding='utf-8'))
         md5value = m.hexdigest()
-        # print(md5value)
         return md5value
 
 
@@ -53,9 +52,6 @@ if __name__ == '__main__':
 
     test = ApiProtocol()
 
-    # content = 'testapp_idtestformatjsonmethodkdt.item.getnum_iid3838293428sign_methodmd5timestamp2013-05-06 13:52:03v1.0test'
-    # content = 'testapp_idtestformatjsonmethodkdt.item.getnum_iid3838293428sign_methodmd5timestamp2016-01-06 20:04:41v1.0test'
-    # test.hash(content)
     test.sign(app_sert, **test_dict)
 
 

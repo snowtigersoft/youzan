@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
-    <email_config username="kylinlingh@foxmail.com" password="lin0607103014"> <!--填入你的qq邮箱和登陆密码-->
-        <server>smtp.qq.com</server>
-        <from>kylin</from>        <!--邮件的发出者-->
-        <subject>测试</subject>    <!--邮件主题-->
+
+    <!--<email_config username="kylinlingh@foxmail.com" password="lin0607103014"> &lt;!&ndash;填入你的qq邮箱和登陆密码&ndash;&gt;-->
+        <!--<server>smtp.qq.com</server> &lt;!&ndash;QQ的邮件服务器&ndash;&gt;-->
+
+    <email_config username="kylinlingh@163.com" password="jeficrozzdunaglv"> <!--填入你的163邮箱用户名和 授权码（不是登陆密码，查看手册）-->
+        <server>smtp.163.com</server> <!--163的邮件服务器-->
+        <from>kylin</from>           <!--邮件的发出者-->
+        <subject>测试</subject>      <!--邮件主题-->
         <text>你好：
         欢迎你，这是一个测试邮件！
         </text>
@@ -13,5 +17,7 @@
         <app_id>290c00897561005101</app_id>
         <app_secert>52813f143dbcc7854815a12043a48213</app_secert>
     </youzan_account>
-    <internal_time>300</internal_time> <!--检测订单的时间间隔（秒）-->
+    <interval>300</interval> <!--检测订单的时间间隔（秒）-->
 </config>
+
+
