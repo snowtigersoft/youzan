@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright (c) 2016 - kylinlingh@foxmail.com
+
 import xml.etree.ElementTree as etree
 from threading import Thread
 import re
