@@ -21,6 +21,7 @@ config_file = os.path.join(base_dir, os.path.pardir, 'config.xml')
 record_file = os.path.join(base_dir, os.path.pardir, 'record.txt')
 attach_dir = os.path.join(base_dir, os.path.pardir, 'attachment')
 
+
 def run():
     global cache_total_result
     logging.basicConfig(filename=log_file, level=logging.INFO)
@@ -28,6 +29,9 @@ def run():
 
     load_config_file()
     cache_total_result = extract_total_result()
+
+    # get_things_done()
+
     while True:
         now = str(time.ctime())
         print('\nchecking at: ', now)
@@ -35,35 +39,39 @@ def run():
         get_things_done()
         time.sleep(int(interval))
 
+
 def extract_total_result():
     result = get_content_from()
     total_number = re.findall('"total_results":"(.*?)"',
                               result, re.S)[0]
     return total_number
 
+
 def load_config_file():
-        global config_file
-        global username
-        global password
-        global email_head
-        global email_subject
-        global email_content_text
-        global app_id
-        global app_secret
-        global interval
-        global mail_server_name
+    global config_file
+    global username
+    global password
+    global email_head
+    global email_subject
+    global email_content_text
+    global app_id
+    global app_secret
+    global interval
+    global mail_server_name
+    global leave_message
 
-        tree = etree.parse(config_file)
+    tree = etree.parse(config_file)
 
-        username = tree.find('email_config').attrib['username']
-        password = tree.find('email_config').attrib['password']
-        email_head = tree.find('email_config/from').text
-        email_subject = tree.find('email_config/subject').text
-        email_content_text = tree.find('email_config/text').text
-        app_id = tree.find('youzan_account/app_id').text
-        app_secret = tree.find('youzan_account/app_secret').text
-        interval = tree.find('interval').text
-        mail_server_name = tree.find('email_config/server').text
+    username = tree.find('email_config').attrib['username']
+    password = tree.find('email_config').attrib['password']
+    email_head = tree.find('email_config/from').text
+    email_subject = tree.find('email_config/subject').text
+    email_content_text = tree.find('email_config/text').text
+    app_id = tree.find('youzan_account/app_id').text
+    app_secret = tree.find('youzan_account/app_secret').text
+    interval = tree.find('interval').text
+    mail_server_name = tree.find('email_config/server').text
+    leave_message = tree.find('youzan_account/leave_message').text
 
 
 def get_content_from():
@@ -81,14 +89,14 @@ def get_content_from():
         .encode('utf-8').decode('unicode-escape')  # transcode from unicode to chinese
     return result
 
+
 def get_things_done():
     result = get_content_from()
-    email_addresses = re.findall('{"title":"邮件","content":"(.*?)"}',
-                                 result, re.S)
-    # email_addresses = re.findall('{"title":"QQ邮箱","content":"(.*?)"}', result, re.S) # get the email addresses
 
+    global leave_message
+    pattern = '{"title":"%s","content":"(.*?)"}' % leave_message
+    email_addresses = re.findall(pattern, result, re.S)  # get the email addresses
     tids = re.findall('"tid":"(.*?)"},', result, re.S)  # get the seriel numer of orders
-    # print(tids)
     total_result = re.findall('"total_results":"(.*?)"', result, re.S)[0]
 
     global record_file
@@ -136,6 +144,11 @@ def write_to_file(total_results, tids, email_addresses, status):
 
 
 def send_mail(addresses):
+    if not addresses:
+        logging.error('Email addresses is empty, '
+                      'check if you can extract the email addresses correctly')
+        raise ValueError('Email addresses is empty, '
+                         'check if you can extract the email addresses correctly')
     to_email_addresses = addresses
     email = MIMEMultipart()
     email['Subject'] = email_subject

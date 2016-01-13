@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
 
-    <!--<email_config username="kylinlingh@foxmail.com" password="lin0607103014"> &lt;!&ndash;填入你的qq邮箱和登陆密码&ndash;&gt;-->
+    <!--<email_config username="" password=""> &lt;!&ndash;填入你的qq邮箱和登陆密码&ndash;&gt;-->
         <!--<server>smtp.qq.com</server> &lt;!&ndash;QQ的邮件服务器&ndash;&gt;-->
 
-    <email_config username="kylinlingh@163.com" password="jeficrozzdunaglv"> <!--填入你的163邮箱用户名和 授权码（不是登陆密码，查看手册）-->
+    <email_config username="" password=""> <!--填入你的163邮箱用户名和 授权码（不是登陆密码，查看手册）-->
         <server>smtp.163.com</server> <!--163的邮件服务器-->
         <from>kylin</from>           <!--邮件的发出者-->
         <subject>测试</subject>      <!--邮件主题-->
@@ -14,8 +14,9 @@
     </email_config>
     <youzan_account>
         <!--填入有赞api中两个参数-->
-        <app_id>290c00897561005101</app_id>
-        <app_secret>52813f143dbcc7854815a12043a48213</app_secret>
+        <app_id>e1044d52d066a67990</app_id>
+        <app_secret>65656b2a6670b7b750bb51c7b31cbff1</app_secret>
+        <leave_message>QQ邮箱</leave_message> <!--要求留言-->
     </youzan_account>
     <interval>30</interval> <!--检测订单的时间间隔（秒）-->
 </config>
