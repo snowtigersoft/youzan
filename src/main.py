@@ -8,6 +8,7 @@ import re
 import time
 import os
 import smtplib
+import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -15,44 +16,57 @@ from src import apiclient
 
 # get the absolute path
 base_dir = os.path.dirname(__file__)
+log_file = os.path.join(base_dir, os.path.pardir, 'log.txt')
 config_file = os.path.join(base_dir, os.path.pardir, 'config.xml')
 record_file = os.path.join(base_dir, os.path.pardir, 'record.txt')
 attach_dir = os.path.join(base_dir, os.path.pardir, 'attachment')
 
-
-def load_config_file():
-    global config_file
-    global username
-    global password
-    global email_head
-    global email_subject
-    global email_content_text
-    global app_id
-    global app_secret
-    global interval
-    global mail_server_name
-
-    tree = etree.parse(config_file)
-
-    username = tree.find('email_config').attrib['username']
-    password = tree.find('email_config').attrib['password']
-    email_head = tree.find('email_config/from').text
-    email_subject = tree.find('email_config/subject').text
-    email_content_text = tree.find('email_config/text').text
-    app_id = tree.find('youzan_account/app_id').text
-    app_secret = tree.find('youzan_account/app_secret').text
-    interval = tree.find('interval').text
-    mail_server_name = tree.find('email_config/server').text
-
-
 def run():
+    global cache_total_result
+    logging.basicConfig(filename=log_file, level=logging.INFO)
+    logging.getLogger("requests").setLevel(logging.WARNING)
+
     load_config_file()
+    cache_total_result = extract_total_result()
     while True:
+        now = str(time.ctime())
+        print('\nchecking at: ', now)
+        logging.info('checking at:{}\n'.format(now))
         get_things_done()
         time.sleep(int(interval))
 
+def extract_total_result():
+    result = get_content_from()
+    total_number = re.findall('"total_results":"(.*?)"',
+                              result, re.S)[0]
+    return total_number
 
-def get_things_done():
+def load_config_file():
+        global config_file
+        global username
+        global password
+        global email_head
+        global email_subject
+        global email_content_text
+        global app_id
+        global app_secret
+        global interval
+        global mail_server_name
+
+        tree = etree.parse(config_file)
+
+        username = tree.find('email_config').attrib['username']
+        password = tree.find('email_config').attrib['password']
+        email_head = tree.find('email_config/from').text
+        email_subject = tree.find('email_config/subject').text
+        email_content_text = tree.find('email_config/text').text
+        app_id = tree.find('youzan_account/app_id').text
+        app_secret = tree.find('youzan_account/app_secret').text
+        interval = tree.find('interval').text
+        mail_server_name = tree.find('email_config/server').text
+
+
+def get_content_from():
     method = 'kdt.trades.sold.get'  # the method to get the status of orders from youzan's api
     params_dict = {
         'fields': 'tid,orders',  # only get these two kinds of contents from method get(url)
@@ -60,28 +74,32 @@ def get_things_done():
         'page_no': 1,
         'status': 'WAIT_BUYER_CONFIRM_GOODS'  # sucessful trade
     }
-    test_object = apiclient.ApiClient(app_id, app_secret)
-    result = test_object.get(method, **params_dict) \
+    global app_id
+    global app_secret
+    api_client = apiclient.ApiClient(app_id, app_secret)
+    result = api_client.get(method, **params_dict) \
         .encode('utf-8').decode('unicode-escape')  # transcode from unicode to chinese
-    # print(result)
+    return result
 
+def get_things_done():
+    result = get_content_from()
     email_addresses = re.findall('{"title":"邮件","content":"(.*?)"}',
                                  result, re.S)
     # email_addresses = re.findall('{"title":"QQ邮箱","content":"(.*?)"}', result, re.S) # get the email addresses
 
     tids = re.findall('"tid":"(.*?)"},', result, re.S)  # get the seriel numer of orders
     # print(tids)
-    total_results = re.findall('"total_results":"(.*?)"', result, re.S)[0]
+    total_result = re.findall('"total_results":"(.*?)"', result, re.S)[0]
 
     global record_file
-    file = open(record_file, mode='r+', encoding='utf-8')
-    pre_total_result = file.readline().split(':')[-1].rstrip('\r\n')  # get the number from file record.txt
-    if int(total_results) > int(pre_total_result):
-        num_of_mail_to_send = int(total_results) - int(pre_total_result)
+    global cache_total_result
+    if int(total_result) > int(cache_total_result):
+        num_of_mail_to_send = int(total_result) - int(cache_total_result)
         email_addresses_to_send_mail = fix_email_address(
                 email_addresses[:num_of_mail_to_send])
         status = send_mail(email_addresses_to_send_mail)
-        write_to_file(total_results, tids,
+        cache_total_result = total_result
+        write_to_file(total_result, tids,
                       email_addresses_to_send_mail, status)
 
 
@@ -99,20 +117,12 @@ def fix_email_address(addresses):
 
 def write_to_file(total_results, tids, email_addresses, status):
     global record_file
-    with open(record_file, 'r', encoding='utf-8') as file:
-        lines = file.readlines()[1:]
 
-    with open(record_file, 'w', encoding='utf-8') as file:
-        file.seek(0, 0)
-        file.write('number_of_trades:' + total_results + '\n')
-        for line in lines:  # write the primary data
-            file.write(line)
-
-        # write the new data
+    with open(record_file, 'a+', encoding='utf-8') as file:
         file.write('\n===================================================='
                    '==========\n')
         time_record = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-        file.write(time_record)
+        file.write(time_record + ' total_result:{}'.format(total_results))
         file.write('\n******************************************************'
                    '********\n')
         file.write('order_id' + '\t' * 5 + 'email_address' + '\t' * 3 + 'status')
@@ -126,8 +136,6 @@ def write_to_file(total_results, tids, email_addresses, status):
 
 
 def send_mail(addresses):
-    # if not isinstance(addresses, list):
-    #     raise ValueError('It must be a list')
     to_email_addresses = addresses
     email = MIMEMultipart()
     email['Subject'] = email_subject
@@ -142,6 +150,7 @@ def send_mail(addresses):
         for filename in each[2]:
             file_path = os.path.join(attach_dir, filename)
             print('sending attachment：', file_path)
+            logging.info('sending attachment{}'.format(str(file_path)))
             attachment = MIMEText(open(file_path, 'rb').read(),
                                   'base64', 'utf-8')
             attachment["Content-Type"] = 'application/octet-stream'
@@ -156,10 +165,12 @@ def send_mail(addresses):
         mail_server.login(username, password)
         mail_server.sendmail(username,
                              to_email_addresses, email.as_string())
-        print('send mail successed')
+        print('sended mail successed')
+        logging.info('sended mail successed')
         send_result = 'Successed'
     except Exception as e:
         print('send mail failed')
+        logging.info('sended mail failed')
         send_result = ('Failed', str(e))
     finally:
         mail_server.close()

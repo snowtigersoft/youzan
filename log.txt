@@ -1,0 +1,154 @@
+INFO:root:checking at:Wed Jan 13 13:55:15 2016
+
+INFO:root:checking at:Wed Jan 13 13:55:45 2016
+
+INFO:root:checking at:Wed Jan 13 13:56:16 2016
+
+INFO:root:checking at:Wed Jan 13 13:56:46 2016
+
+INFO:root:checking at:Wed Jan 13 13:57:16 2016
+
+INFO:root:checking at:Wed Jan 13 13:57:47 2016
+
+INFO:root:checking at:Wed Jan 13 13:58:17 2016
+
+INFO:root:checking at:Wed Jan 13 13:58:47 2016
+
+INFO:root:checking at:Wed Jan 13 13:59:18 2016
+
+INFO:root:checking at:Wed Jan 13 13:59:48 2016
+
+INFO:root:checking at:Wed Jan 13 14:00:19 2016
+
+INFO:root:checking at:Wed Jan 13 14:00:49 2016
+
+INFO:root:checking at:Wed Jan 13 14:01:19 2016
+
+INFO:root:checking at:Wed Jan 13 14:01:50 2016
+
+INFO:root:checking at:Wed Jan 13 14:02:20 2016
+
+INFO:root:checking at:Wed Jan 13 14:02:50 2016
+
+INFO:root:checking at:Wed Jan 13 14:03:24 2016
+
+INFO:root:checking at:Wed Jan 13 14:03:54 2016
+
+INFO:root:checking at:Wed Jan 13 14:04:24 2016
+
+INFO:root:checking at:Wed Jan 13 14:04:54 2016
+
+INFO:root:checking at:Wed Jan 13 14:05:25 2016
+
+INFO:root:checking at:Wed Jan 13 14:05:55 2016
+
+INFO:root:checking at:Wed Jan 13 14:06:25 2016
+
+INFO:root:checking at:Wed Jan 13 14:06:56 2016
+
+INFO:root:checking at:Wed Jan 13 14:07:26 2016
+
+INFO:root:checking at:Wed Jan 13 14:07:56 2016
+
+INFO:root:checking at:Wed Jan 13 14:08:26 2016
+
+INFO:root:checking at:Wed Jan 13 14:08:57 2016
+
+INFO:root:checking at:Wed Jan 13 14:09:27 2016
+
+INFO:root:checking at:Wed Jan 13 14:10:01 2016
+
+INFO:root:checking at:Wed Jan 13 14:10:31 2016
+
+INFO:root:checking at:Wed Jan 13 14:11:01 2016
+
+INFO:root:checking at:Wed Jan 13 14:11:32 2016
+
+INFO:root:checking at:Wed Jan 13 14:12:05 2016
+
+INFO:root:checking at:Wed Jan 13 14:12:35 2016
+
+INFO:root:checking at:Wed Jan 13 14:13:06 2016
+
+INFO:root:checking at:Wed Jan 13 14:13:36 2016
+
+INFO:root:checking at:Wed Jan 13 14:14:06 2016
+
+INFO:root:checking at:Wed Jan 13 14:14:36 2016
+
+INFO:root:checking at:Wed Jan 13 14:15:07 2016
+
+INFO:root:checking at:Wed Jan 13 14:15:37 2016
+
+INFO:root:checking at:Wed Jan 13 14:16:07 2016
+
+INFO:root:checking at:Wed Jan 13 14:16:37 2016
+
+INFO:root:checking at:Wed Jan 13 14:17:08 2016
+
+INFO:root:checking at:Wed Jan 13 14:17:38 2016
+
+INFO:root:checking at:Wed Jan 13 14:18:08 2016
+
+INFO:root:checking at:Wed Jan 13 14:18:39 2016
+
+INFO:root:checking at:Wed Jan 13 14:19:09 2016
+
+INFO:root:checking at:Wed Jan 13 14:19:39 2016
+
+INFO:root:checking at:Wed Jan 13 14:20:10 2016
+
+INFO:root:sending attachmentD:/pycharm_project/youzan/src\..\attachment\Python魔力手册v1.1.pdf
+INFO:root:sended mail successed
+INFO:root:checking at:Wed Jan 13 14:21:12 2016
+
+INFO:root:checking at:Wed Jan 13 14:21:42 2016
+
+INFO:root:checking at:Wed Jan 13 14:22:15 2016
+
+INFO:root:checking at:Wed Jan 13 14:22:46 2016
+
+INFO:root:checking at:Wed Jan 13 14:23:16 2016
+
+INFO:root:checking at:Wed Jan 13 14:23:46 2016
+
+INFO:root:checking at:Wed Jan 13 14:24:16 2016
+
+INFO:root:checking at:Wed Jan 13 14:24:47 2016
+
+INFO:root:checking at:Wed Jan 13 14:25:17 2016
+
+INFO:root:checking at:Wed Jan 13 14:25:47 2016
+
+INFO:root:checking at:Wed Jan 13 14:26:18 2016
+
+INFO:root:checking at:Wed Jan 13 14:26:48 2016
+
+INFO:root:checking at:Wed Jan 13 14:27:18 2016
+
+INFO:root:checking at:Wed Jan 13 14:27:49 2016
+
+INFO:root:sending attachmentD:/pycharm_project/youzan/src\..\attachment\Python魔力手册v1.1.pdf
+INFO:root:sended mail successed
+INFO:root:checking at:Wed Jan 13 14:28:43 2016
+
+INFO:root:checking at:Wed Jan 13 14:29:14 2016
+
+INFO:root:checking at:Wed Jan 13 14:29:44 2016
+
+INFO:root:checking at:Wed Jan 13 14:30:17 2016
+
+INFO:root:checking at:Wed Jan 13 14:30:51 2016
+
+INFO:root:checking at:Wed Jan 13 14:31:21 2016
+
+INFO:root:checking at:Wed Jan 13 14:31:51 2016
+
+INFO:root:checking at:Wed Jan 13 14:32:22 2016
+
+INFO:root:checking at:Wed Jan 13 14:32:52 2016
+
+INFO:root:checking at:Wed Jan 13 14:33:22 2016
+
+INFO:root:checking at:Wed Jan 13 14:33:52 2016
+
