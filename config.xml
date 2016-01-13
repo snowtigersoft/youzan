@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <config>
 
-    <!--<email_config username="" password=""> &lt;!&ndash;填入你的qq邮箱和登陆密码&ndash;&gt;-->
-        <!--<server>smtp.qq.com</server> &lt;!&ndash;QQ的邮件服务器&ndash;&gt;-->
+    <email_config username="" password=""> <!--填入你的qq邮箱和登陆密码-->
+        <server>smtp.qq.com</server> <!--QQ的邮件服务器-->
 
-    <email_config username="" password=""> <!--填入你的163邮箱用户名和 授权码（不是登陆密码，查看手册）-->
-        <server>smtp.163.com</server> <!--163的邮件服务器-->
-        <from>kylin</from>           <!--邮件的发出者-->
+    <!--<email_config username="" password=""> &lt;!&ndash;填入你的163邮箱用户名和 授权码（不是登陆密码，查看手册）&ndash;&gt;-->
+        <!--<server>smtp.163.com</server> &lt;!&ndash;163的邮件服务器&ndash;&gt;-->
+        <from></from>           <!--邮件的发出者-->
         <subject>测试</subject>      <!--邮件主题-->
-        <text>你好：
-        欢迎你，这是一个测试邮件！
+        <text>嗨，亲爱的朋友！
+
+        欢迎加入魔力计划！附件可以看到最新的教程，包含了之前的全部内容。
+        另外，请加入 QQ 群：，进群回答的问题答案是：魔力计划。
+        教程的后续更新以及其他的分享资料也放在群文件里面了。
+        学习过程中有什么问题，也可以在 qq 群里面讨论。
         </text>
     </email_config>
     <youzan_account>
