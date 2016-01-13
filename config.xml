@@ -14,8 +14,8 @@
     </email_config>
     <youzan_account>
         <!--填入有赞api中两个参数-->
-        <app_id>e1044d52d066a67990</app_id>
-        <app_secret>65656b2a6670b7b750bb51c7b31cbff1</app_secret>
+        <app_id></app_id>
+        <app_secret></app_secret>
         <leave_message>QQ邮箱</leave_message> <!--要求留言-->
     </youzan_account>
     <interval>30</interval> <!--检测订单的时间间隔（秒）-->
